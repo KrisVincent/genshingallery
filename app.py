@@ -47,6 +47,7 @@ def forgot_pass_page():
 
 
             email_sender(session["code"],get_email)
+
             flash(f" Check your email for code", "info")
             return redirect(url_for("forgot_pass_code_page"))
 
@@ -65,6 +66,7 @@ def check_email(email):
         return True
 
     return False
+
 @app.route("/forgot-account-update", methods = ["POST","GET"])
 def forgot_account_page():
     data = account_table.query.filter_by(email = session["email"]).first()
@@ -72,9 +74,6 @@ def forgot_account_page():
     if request.method == "POST":
         get_email = request.form["email"]
         get_password = request.form["password"]
-
-
-
         update_account_data(get_email,get_password)
 
         session.pop("email", None)
@@ -601,8 +600,6 @@ def get_gallery_id():
 
 #gmail
 def email_sender(code,email):
-
-
 
     password = ""
 
