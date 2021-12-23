@@ -1,7 +1,7 @@
 #Music Played while doing this project
 #https://www.youtube.com/watch?v=cGYyOY4XaFs&t=2403s&ab_channel=Rousseau
 import random
-
+ 
 import PIL.Image as Image
 import io
 import base64
@@ -25,6 +25,7 @@ def update_account_page():
 
     if request.method == "POST":
         get_email = request.form["email"]
+        get_name = request.form["username"]
         get_password = request.form["password"]
         get_old_password = request.form["old password"]
 
@@ -33,7 +34,7 @@ def update_account_page():
             return redirect(url_for("update_account_page"))
 
 
-        update_account_data(get_email,get_password)
+        update_account_data(get_name,get_email,get_password)
 
 
     return render_template("updateaccountpage.html",
@@ -460,9 +461,12 @@ def charater_upload_page():
 
 #below are non website func
 
-def update_account_data(email,password):
-    user = (account_table.query.filter_by(email=email).first())
+def update_account_data(username,email,password):
+    user = (account_table.query.filter_by(username=username).first())
+    print(username,email,password)
+    print(user.email)
     user.email = email
+    print(user.email)
     user.password = password
 
     db.session.commit()
