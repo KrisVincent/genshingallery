@@ -16,7 +16,7 @@ from flask import Flask, redirect, url_for, render_template, \
 
 from database import account_table, gallery_account_table, mondstadt, characters, db, app, liyue, inazuma
 
-app = Flask(__name__)
+
 
 
 @app.route("/account-update", methods = ["POST","GET"])
@@ -640,4 +640,5 @@ Thank You '''
 
 if __name__ == "__main__":
     app.run(debug=True)
+ 
     db.create_all()
