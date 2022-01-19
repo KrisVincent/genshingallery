@@ -1,7 +1,5 @@
-#Music Played while doing this project
-#https://www.youtube.com/watch?v=cGYyOY4XaFs&t=2403s&ab_channel=Rousseau
 import random
- 
+
 import PIL.Image as Image
 import io
 import base64
@@ -17,15 +15,12 @@ from flask import Flask, redirect, url_for, render_template, \
 from database import account_table, gallery_account_table, mondstadt, characters, db, app, liyue, inazuma
 
 
-
-
 @app.route("/account-update", methods = ["POST","GET"])
 def update_account_page():
     data = account_table.query.filter_by(id = get_user_id()).first()
 
     if request.method == "POST":
         get_email = request.form["email"]
-        get_name = request.form["username"]
         get_password = request.form["password"]
         get_old_password = request.form["old password"]
 
@@ -34,7 +29,7 @@ def update_account_page():
             return redirect(url_for("update_account_page"))
 
 
-        update_account_data(get_name,get_email,get_password)
+        update_account_data(get_email,get_password)
 
 
     return render_template("updateaccountpage.html",
@@ -326,6 +321,7 @@ def register_account_page():
     if request.method == "POST":
         get_username = request.form["username"]
         get_password = request.form["password"]
+        get_confirm_password = request.form["confirm_password"]
         get_fname = request.form["fname"]
         get_lname = request.form["lname"]
         get_email = request.form["email"]
@@ -338,12 +334,17 @@ def register_account_page():
                             get_gender,
                             get_password)
 
-        if user_exists:
-
-            flash(f" {get_username} User Already Exists", "info")
+        if get_confirm_password != get_password:
+            flash("Sorry But Please make sure password and confirm password are the same", "info")
             return redirect(url_for("register_account_page"))
 
-        else:
+
+        if user_exists:
+
+            flash(f" {get_username} User Already Exists or {get_email} email Already Exists", "info")
+            return redirect(url_for("register_account_page"))
+
+        if not user_exists:
             flash("User Registered", "info")
             return redirect(url_for("login_page"))
 
@@ -461,12 +462,11 @@ def charater_upload_page():
 
 #below are non website func
 
-def update_account_data(username,email,password):
-    user = (account_table.query.filter_by(username=username).first())
-    print(username,email,password)
-    print(user.email)
+def update_account_data(email,password):
+   
+    user = (account_table.query.filter_by(email=email).first())
+    print(user)
     user.email = email
-    print(user.email)
     user.password = password
 
     db.session.commit()
@@ -527,7 +527,9 @@ def insert_account_Data(username,fname,lname,email,gender,password):
 
     user_exists = account_table.query.filter_by(username = username).first()
 
-    if user_exists:
+    email_exists = account_table.query.filter_by(email = email).first()
+
+    if user_exists or email_exists:
 
         return True
 
@@ -644,5 +646,4 @@ Thank You '''
 
 if __name__ == "__main__":
     app.run(debug=True)
- 
     db.create_all()

@@ -1,6 +1,5 @@
 {% extends "base.html" %}
-                        <html>
-                            <head>
+                       
                             	{% block head %}
                                 <meta charset='utf-8'>
                                 <meta name='viewport' content='width=device-width, initial-scale=1'>
@@ -11,13 +10,25 @@
                                 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/login.css') }}">
                        
                                 {% endblock %}
-                                </head>
+                         
                                 
 
 
 {% block content%}
-                                <body oncontextmenu='return false' class='snippet-body'>
-                                <div class="container px-4 py-5 mx-auto">
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <script>
+      var messages = {{ messages | safe }};
+      for (var i=0; i<messages.length; i++) {
+        alert(messages[i]);
+      }
+    </script>
+  {% endif %}
+{% endwith %}
+
+<body oncontextmenu='return false' class='snippet-body'>
+<div class="container px-4 py-5 mx-auto">
 
     <div class="card card0">
         <div class="d-flex flex-lg-row flex-column-reverse">
@@ -28,13 +39,7 @@
                            <form action= "#" method="post">
                         <h3 class="mb-5 text-center heading">Genshin Impact Adventure Log!</h3>
                         <h6 class="msg-info">Please login to your account</h6>
-                          {% with messages = get_flashed_messages() %}
-                            {% if messages %}
-                                {% for msg in messages%}
-                                    <p>{{msg}}</p>
-                                {% endfor %}
-                            {% endif %}
-                        {% endwith %}
+                   
       
                           
                         <div class="form-group"> <label class="form-control-label text-muted">Username</label> <input type="text" id="email" name="user" placeholder="Phone no or email id" class="form-control"> </div>
